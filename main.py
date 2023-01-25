@@ -12,17 +12,17 @@ app = FastAPI(
 )
 
 
-@app.get("/")
+@app.get("/pokemon/")
 async def read_pokemon():
     res = await PokemonModel.get_pokemon()
     return res
 
 
-@app.get("/pokemon/{pokemon_name}/{pokemon_tipo}")
-async def create_pokemon(pokemon_name: str, pokemon_tipo: str):
+@app.post("/pokemon/")
+async def create_pokemon(pokemon: PokemonRequestModel):
     # primera letra en mayúscula
-    pokemon_name = pokemon_name.capitalize()
-    pokemon_tipo = pokemon_tipo.capitalize()
+    pokemon_name = pokemon.pokemon_name.capitalize()
+    pokemon_tipo = pokemon.pokemon_tipo.capitalize()
 
     # guardamos el pokemon
     await PokemonModel.save_pokemon(pokemon_name, pokemon_tipo)
