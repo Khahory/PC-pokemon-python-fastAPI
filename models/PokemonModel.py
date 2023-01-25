@@ -1,7 +1,6 @@
 from database import engine
 
 from sqlalchemy import Table, Column, Integer, String, MetaData, text, Boolean, DefaultClause
-from fastapi import HTTPException
 
 # relacionamos nuestro metadata con la conexion
 metadata_obj = MetaData(engine)
@@ -27,9 +26,6 @@ async def get_pokemon(pokemon_id=None):
         with engine.connect() as conn:
             result = conn.execute(select)
             result = result.mappings().all()
-
-            if len(result) < 1:
-                return HTTPException(status_code=404, detail="No se encontró el pokemon")
             return result
 
     except Exception as e:

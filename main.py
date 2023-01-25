@@ -1,8 +1,10 @@
 from fastapi import FastAPI
+from fastapi import HTTPException
+
 
 # mis imports
 from models import PokemonModel
-from shemas import PokemonRequestModel
+from shemas import PokemonRequestModel, PokemonResponseModel
 
 # vamos a ponerle un nombre a la aplicación
 app = FastAPI(
@@ -15,7 +17,15 @@ app = FastAPI(
 @app.get("/pokemon/{pokemon_id}")
 async def read_pokemon(pokemon_id: int):
     res = await PokemonModel.get_pokemon(pokemon_id)
-    return res
+
+    if len(res) < 1:
+        return HTTPException(status_code=404, detail="No se encontró el pokemon")
+
+    return PokemonResponseModel(
+        pokemon_id=res[0]["id"],
+        pokemon_name=res[0]["nombre"],
+        pokemon_tipo=res[0]["tipo"],
+    )
 
 
 @app.get("/pokemones/")
