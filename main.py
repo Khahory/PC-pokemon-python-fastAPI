@@ -12,7 +12,13 @@ app = FastAPI(
 )
 
 
-@app.get("/pokemon/")
+@app.get("/pokemon/{pokemon_id}")
+async def read_pokemon(pokemon_id: int):
+    res = await PokemonModel.get_pokemon(pokemon_id)
+    return res
+
+
+@app.get("/pokemones/")
 async def read_pokemon():
     res = await PokemonModel.get_pokemon()
     return res
